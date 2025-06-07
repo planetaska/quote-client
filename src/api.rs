@@ -87,3 +87,17 @@ pub async fn update_quote(id: i64, request: UpdateQuoteRequest) -> Result<QuoteW
         .await
         .map_err(|e| format!("Failed to parse JSON: {:?}", e))
 }
+
+pub async fn delete_quote(id: i64) -> Result<(), String> {
+    let url = format!("http://localhost:3000/api/v1/quotes/{}", id);
+    let resp = Request::delete(&url)
+        .send()
+        .await
+        .map_err(|e| format!("Request failed: {:?}", e))?;
+
+    if !resp.ok() {
+        return Err(format!("HTTP error: {}", resp.status()));
+    }
+
+    Ok(())
+}

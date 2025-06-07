@@ -1,4 +1,4 @@
-use crate::api::update_quote;
+use crate::api::{update_quote, delete_quote};
 use crate::types::{QuoteWithTags, UpdateQuoteRequest};
 use crate::components::app::RefreshContext;
 use leptos::prelude::*;
@@ -11,6 +11,7 @@ pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>) -> impl IntoView {
     let edit_source = RwSignal::new(String::new());
     let edit_tags = RwSignal::new(String::new());
     let is_saving = RwSignal::new(false);
+    let is_deleting = RwSignal::new(false);
     
     let refresh_context = expect_context::<RefreshContext>();
 
@@ -54,6 +55,29 @@ pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>) -> impl IntoView {
             }
             is_saving.set(false);
         });
+    };
+
+    let delete_quote_action = move |_| {
+        let current_quote = quote.get();
+        
+        if web_sys::window()
+            .unwrap()
+            .confirm_with_message(&format!("Are you sure you want to delete this quote?\n\n\"{}\"", current_quote.quote))
+            .unwrap_or(false)
+        {
+            is_deleting.set(true);
+            spawn_local(async move {
+                match delete_quote(current_quote.id).await {
+                    Ok(_) => {
+                        refresh_context.refresh_quotes.run(());
+                    }
+                    Err(e) => {
+                        web_sys::console::error_1(&format!("Failed to delete quote: {}", e).into());
+                    }
+                }
+                is_deleting.set(false);
+            });
+        }
     };
 
     view! {
@@ -125,6 +149,13 @@ pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>) -> impl IntoView {
                         <div class="quote-actions">
                             <button class="edit-button" on:click=start_edit>
                                 "Edit"
+                            </button>
+                            <button 
+                                class="delete-button bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded ml-2 disabled:opacity-50" 
+                                on:click=delete_quote_action
+                                disabled=is_deleting
+                            >
+                                {move || if is_deleting.get() { "Deleting..." } else { "Delete" }}
                             </button>
                         </div>
                     }.into_any()
