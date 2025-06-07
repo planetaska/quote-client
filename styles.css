@@ -190,11 +190,11 @@
 
   /* Navigation Styles */
   .navigation {
-    @apply bg-white shadow-sm border-b border-gray-200;
+    @apply bg-white w-full shadow-sm border-b border-gray-200;
   }
 
   .nav-list {
-    @apply max-w-6xl mx-auto flex flex-wrap items-center gap-1 p-4;
+    @apply max-w-2xl mx-auto flex flex-wrap justify-between items-center gap-1 p-4;
   }
 
   .nav-list li {

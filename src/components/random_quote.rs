@@ -2,6 +2,7 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use crate::api::fetch_random_quote;
 use crate::types::QuoteWithTags;
+use crate::components::QuoteDisplay;
 
 #[component]
 pub fn RandomQuote() -> impl IntoView {
@@ -52,30 +53,16 @@ pub fn RandomQuote() -> impl IntoView {
                             </div>
                         }.into_any()
                     } else if let Some(q) = quote.get() {
+                        let quote_signal = Signal::from(q);
                         view! {
-                            <div class="quote-display">
-                                <blockquote class="quote-text">
-                                    "\"" {q.quote} "\""
-                                </blockquote>
-                                <div class="quote-meta">
-                                    <p class="quote-source">
-                                        "— " {q.source}
-                                    </p>
-                                    {if !q.tags.is_empty() {
-                                        view! {
-                                            <div class="quote-tags">
-                                                {q.tags.into_iter().map(|tag| {
-                                                    view! {
-                                                        <span class="tag">{tag}</span>
-                                                    }
-                                                }).collect::<Vec<_>>()}
-                                            </div>
-                                        }.into_any()
-                                    } else {
-                                        view! { <div></div> }.into_any()
-                                    }}
-                                </div>
-                            </div>
+                            <QuoteDisplay 
+                                quote=quote_signal
+                                show_quote_marks=false
+                                container_class="home-quote-display"
+                                quote_class="home-quote-text"
+                                source_class="home-quote-source"
+                                tags_class="home-quote-tags"
+                            />
                         }.into_any()
                     } else {
                         view! {

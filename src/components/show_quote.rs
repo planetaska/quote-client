@@ -1,47 +1,50 @@
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use crate::api::fetch_random_quote;
+use leptos_router::hooks::use_params_map;
+use crate::api::fetch_quote_by_id;
 use crate::types::QuoteWithTags;
 use crate::components::QuoteDisplay;
 
 #[component]
-pub fn Home() -> impl IntoView {
+pub fn ShowQuote() -> impl IntoView {
+    let params = use_params_map();
     let (quote, set_quote) = signal::<Option<QuoteWithTags>>(None);
     let (loading, set_loading) = signal(false);
     let (error, set_error) = signal::<Option<String>>(None);
 
-    let load_random_quote = move || {
-        set_loading.set(true);
-        set_error.set(None);
+    let load_quote = move || {
+        let id_str = params.get().get("id").map(|s| s.clone()).unwrap_or_default();
         
-        spawn_local(async move {
-            match fetch_random_quote().await {
-                Ok(q) => {
-                    set_quote.set(Some(q));
-                    set_error.set(None);
+        if let Ok(id) = id_str.parse::<u32>() {
+            set_loading.set(true);
+            set_error.set(None);
+            
+            spawn_local(async move {
+                match fetch_quote_by_id(id).await {
+                    Ok(q) => {
+                        set_quote.set(Some(q));
+                        set_error.set(None);
+                    }
+                    Err(e) => {
+                        set_error.set(Some(e));
+                    }
                 }
-                Err(e) => {
-                    set_error.set(Some(e));
-                }
-            }
-            set_loading.set(false);
-        });
+                set_loading.set(false);
+            });
+        } else {
+            set_error.set(Some("Invalid quote ID".to_string()));
+        }
     };
 
-    // Load initial quote
+    // Load quote when component mounts or when params change
     Effect::new(move |_| {
-        load_random_quote();
+        load_quote();
     });
 
     view! {
         <div class="page-content">
-            <div class="home-hero">
-                <h1 class="hero-title">"Welcome to the Quotes Server!"</h1>
-                <p class="hero-subtitle">"Serving up fresh inspiration 24/7 — no login, no nonsense, just quotes!"</p>
-            </div>
-            
-            <div class="home-quote-section">
-                <h2 class="section-title">"Your Daily Inspiration"</h2>
+            <div class="show-quote-container">
+                <h1 class="page-title">"Quote"</h1>
                 
                 {move || {
                     if loading.get() {
@@ -57,7 +60,7 @@ pub fn Home() -> impl IntoView {
                                 <p>"Error: " {error_msg}</p>
                                 <button 
                                     class="btn btn-secondary"
-                                    on:click=move |_| load_random_quote()
+                                    on:click=move |_| load_quote()
                                 >
                                     "Try Again"
                                 </button>
@@ -78,21 +81,11 @@ pub fn Home() -> impl IntoView {
                     } else {
                         view! {
                             <div class="no-quote">
-                                <p>"No quote available"</p>
+                                <p>"No quote found"</p>
                             </div>
                         }.into_any()
                     }
                 }}
-                
-                <div class="home-quote-actions">
-                    <button 
-                        class="btn btn-primary"
-                        on:click=move |_| load_random_quote()
-                        disabled=loading
-                    >
-                        {move || if loading.get() { "Loading..." } else { "Get Another Quote" }}
-                    </button>
-                </div>
             </div>
         </div>
     }

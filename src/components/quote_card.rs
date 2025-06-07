@@ -3,6 +3,7 @@ use crate::types::{QuoteWithTags, UpdateQuoteRequest};
 use crate::components::app::RefreshContext;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
+use leptos_router::hooks::use_navigate;
 
 #[component]
 pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>) -> impl IntoView {
@@ -14,6 +15,8 @@ pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>) -> impl IntoView {
     let is_deleting = RwSignal::new(false);
     
     let refresh_context = expect_context::<RefreshContext>();
+    let navigate = use_navigate();
+
 
     let start_edit = move |_| {
         let current_quote = quote.get();
@@ -147,6 +150,18 @@ pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>) -> impl IntoView {
                             </div>
                         })}
                         <div class="quote-actions">
+                            <button 
+                                class="edit-button"
+                                on:click={
+                                    let navigate = navigate.clone();
+                                    move |_| {
+                                        let id = current_quote.id;
+                                        navigate(&format!("/quote/{}", id), Default::default());
+                                    }
+                                }
+                            >
+                                "Show"
+                            </button>
                             <button class="edit-button" on:click=start_edit>
                                 "Edit"
                             </button>

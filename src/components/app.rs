@@ -1,8 +1,8 @@
-use crate::components::{Navigation, Home, RandomQuote, About, QuotesPage};
+use crate::components::{Navigation, Home, RandomQuote, About, QuotesPage, ShowQuote};
 use leptos::prelude::*;
 use leptos::context::Provider;
 use leptos_router::components::{Router, Routes, Route};
-use leptos_router::StaticSegment;
+use leptos_router::{StaticSegment, ParamSegment};
 
 // Global refresh context
 #[derive(Clone, Copy)]
@@ -12,7 +12,7 @@ pub struct RefreshContext {
 
 #[component]
 pub fn App() -> impl IntoView {
-    let (refresh_counter, set_refresh_counter) = signal(0u32);
+    let (_refresh_counter, set_refresh_counter) = signal(0u32);
 
     let refresh_quotes = Callback::new(move |_| {
         set_refresh_counter.update(|n| *n += 1);
@@ -33,6 +33,7 @@ pub fn App() -> impl IntoView {
                             <Route path=StaticSegment("") view=Home />
                             <Route path=StaticSegment("random") view=RandomQuote />
                             <Route path=StaticSegment("quotes") view=QuotesPage />
+                            <Route path=(StaticSegment("quote"), ParamSegment("id")) view=ShowQuote />
                             <Route path=StaticSegment("about") view=About />
                         </Routes>
                     </main>
