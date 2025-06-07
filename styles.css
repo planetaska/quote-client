@@ -187,4 +187,93 @@
   .page-content {
     @apply max-w-6xl mx-auto p-6;
   }
+
+  /* Navigation Styles */
+  .navigation {
+    @apply bg-white shadow-sm border-b border-gray-200;
+  }
+
+  .nav-list {
+    @apply max-w-6xl mx-auto flex flex-wrap items-center gap-1 p-4;
+  }
+
+  .nav-list li {
+    @apply list-none;
+  }
+
+  .nav-link {
+    @apply px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 active:scale-95;
+  }
+
+  .nav-link[aria-current="page"] {
+    @apply bg-blue-600 text-white hover:bg-blue-700 hover:text-white;
+  }
+
+  /* Random Quote Page Styles */
+  .random-quote-container {
+    @apply max-w-4xl mx-auto;
+  }
+
+  .page-title {
+    @apply text-center mb-12 text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+  }
+
+  .quote-display {
+    @apply bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100 transform transition-all duration-300 hover:shadow-2xl;
+  }
+
+  .quote-display .quote-text {
+    @apply text-2xl md:text-3xl text-gray-800 font-light leading-relaxed text-center mb-8 relative;
+    font-family: 'Georgia', 'Times New Roman', serif;
+  }
+
+  .quote-display .quote-text::before {
+    @apply absolute -top-4 -left-4 text-6xl text-blue-200 font-serif leading-none opacity-60;
+    content: '"';
+  }
+
+  .quote-display .quote-text::after {
+    @apply absolute -bottom-8 -right-4 text-6xl text-blue-200 font-serif leading-none opacity-60;
+    content: '"';
+  }
+
+  .quote-meta {
+    @apply text-center border-t border-gray-100 pt-6;
+  }
+
+  .quote-display .quote-source {
+    @apply text-xl text-gray-600 font-semibold mb-6 not-italic;
+  }
+
+  .quote-display .quote-tags {
+    @apply flex flex-wrap justify-center gap-2;
+  }
+
+  .quote-display .tag {
+    @apply bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm px-4 py-2 rounded-full font-medium shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+
+  .quote-actions {
+    @apply text-center;
+  }
+
+  .next-quote-btn {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-lg;
+  }
+
+  .loading-spinner {
+    @apply text-center py-16;
+  }
+
+  .spinner {
+    @apply inline-block w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4;
+  }
+
+  .error-message {
+    @apply bg-red-50 border border-red-200 text-red-700 p-6 rounded-lg text-center;
+  }
+
+  .no-quote {
+    @apply text-center py-16 text-gray-500;
+  }
 }
