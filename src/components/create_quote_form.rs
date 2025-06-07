@@ -1,10 +1,10 @@
 use crate::api::create_quote;
-use crate::types::CreateQuoteRequest;
+use crate::types::{CreateQuoteRequest, QuoteWithTags};
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 
 #[component]
-pub fn CreateQuoteForm(on_success: Callback<()>) -> impl IntoView {
+pub fn CreateQuoteForm(on_success: Callback<()>, #[prop(optional)] on_quote_created: Option<Callback<QuoteWithTags>>) -> impl IntoView {
     let (quote_text, set_quote_text) = signal(String::new());
     let (source, set_source) = signal(String::new());
     let (tags_input, set_tags_input) = signal(String::new());
@@ -40,12 +40,17 @@ pub fn CreateQuoteForm(on_success: Callback<()>) -> impl IntoView {
                 set_success.set(false);
 
                 match create_quote(request).await {
-                    Ok(_) => {
+                    Ok(new_quote) => {
                         set_quote_text.set(String::new());
                         set_source.set(String::new());
                         set_tags_input.set(String::new());
                         set_success.set(true);
                         set_creating.set(false);
+                        
+                        // Notify about the new quote immediately
+                        if let Some(on_quote_created) = on_quote_created {
+                            on_quote_created.run(new_quote);
+                        }
                         
                         // Call the success callback after a short delay to show success message
                         set_timeout(

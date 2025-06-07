@@ -1,18 +1,15 @@
 use crate::api::fetch_quotes;
 use crate::components::QuoteCard;
-use crate::types::QuoteWithTags;
 use leptos::prelude::*;
-use std::collections::HashMap;
 
 #[component]
-pub fn QuotesList() -> impl IntoView {
-    let quotes_resource = LocalResource::new(|| fetch_quotes());
-    let quotes_map = RwSignal::new(HashMap::<i64, QuoteWithTags>::new());
-
-    let update_quote_in_list = Callback::new(move |updated_quote: QuoteWithTags| {
-        quotes_map.update(|map| {
-            map.insert(updated_quote.id, updated_quote);
-        });
+pub fn QuotesList(#[prop(optional)] refresh_trigger: Option<Signal<u32>>) -> impl IntoView {
+    let quotes_resource = LocalResource::new(move || {
+        // Track the refresh trigger to re-run when it changes
+        if let Some(trigger) = refresh_trigger {
+            trigger.track();
+        }
+        fetch_quotes()
     });
 
     view! {
@@ -22,13 +19,6 @@ pub fn QuotesList() -> impl IntoView {
 {move || Suspend::new(async move {
                 match quotes_resource.await {
                     Ok(quotes) => {
-                        // Initialize the quotes map
-                        let mut initial_map = HashMap::new();
-                        for quote in &quotes {
-                            initial_map.insert(quote.id, quote.clone());
-                        }
-                        quotes_map.set(initial_map);
-
                         if quotes.is_empty() {
                             view! { <p>"No quotes available."</p> }.into_any()
                         } else {
@@ -38,17 +28,9 @@ pub fn QuotesList() -> impl IntoView {
                                         each=move || quotes.clone()
                                         key=|quote| quote.id
                                         children=move |quote| {
-                                            let quote_id = quote.id;
-                                            let quote_signal = Signal::derive(move || {
-                                                quotes_map.with(|map| {
-                                                    map.get(&quote_id).cloned().unwrap_or(quote.clone())
-                                                })
-                                            });
-                                            
                                             view! {
                                                 <QuoteCard 
-                                                    quote=quote_signal
-                                                    on_update=update_quote_in_list
+                                                    quote=Signal::derive(move || quote.clone())
                                                 />
                                             }
                                         }

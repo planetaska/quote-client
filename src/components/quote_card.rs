@@ -1,15 +1,18 @@
 use crate::api::update_quote;
 use crate::types::{QuoteWithTags, UpdateQuoteRequest};
+use crate::components::app::RefreshContext;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 
 #[component]
-pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>, #[prop(optional)] on_update: Option<Callback<QuoteWithTags>>) -> impl IntoView {
+pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>) -> impl IntoView {
     let is_editing = RwSignal::new(false);
     let edit_quote = RwSignal::new(String::new());
     let edit_source = RwSignal::new(String::new());
     let edit_tags = RwSignal::new(String::new());
     let is_saving = RwSignal::new(false);
+    
+    let refresh_context = expect_context::<RefreshContext>();
 
     let start_edit = move |_| {
         let current_quote = quote.get();
@@ -40,11 +43,10 @@ pub fn QuoteCard(#[prop(into)] quote: Signal<QuoteWithTags>, #[prop(optional)] o
         is_saving.set(true);
         spawn_local(async move {
             match update_quote(current_quote.id, update_request).await {
-                Ok(updated_quote) => {
-                    if let Some(on_update) = on_update {
-                        on_update.run(updated_quote);
-                    }
+                Ok(_updated_quote) => {
                     is_editing.set(false);
+                    // Trigger refresh of the quotes list
+                    refresh_context.refresh_quotes.run(());
                 }
                 Err(e) => {
                     web_sys::console::error_1(&format!("Failed to update quote: {}", e).into());
