@@ -8,7 +8,7 @@
   }
   
   h1 {
-    @apply text-3xl font-bold text-gray-800 mb-6;
+    @apply text-4xl font-bold text-gray-800 mb-8 text-center;
   }
   
   p {
@@ -17,35 +17,123 @@
 }
 
 @layer components {
+  .app {
+    @apply min-h-screen bg-gray-50;
+  }
+  
+  .app-header {
+    @apply max-w-6xl mx-auto p-6 pb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4;
+  }
+  
+  .app-header h1 {
+    @apply mb-0;
+  }
+  
+  .toggle-form-btn {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg;
+  }
+  
+  .form-container {
+    @apply overflow-hidden transition-all duration-500 ease-in-out;
+  }
+  
+  .form-container.hidden {
+    @apply max-h-0 opacity-0 transform -translate-y-4;
+  }
+  
+  .form-container.visible {
+    @apply max-h-screen opacity-100 transform translate-y-0;
+  }
+  
   .quotes-container {
     @apply max-w-6xl mx-auto p-6;
   }
   
+  .quotes-container h1 {
+    @apply mb-4;
+  }
+  
+  .quotes-container p {
+    @apply text-center text-gray-600 mb-8;
+  }
+  
   .quotes-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8;
   }
   
   .quote-card {
-    @apply bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-200;
+    @apply bg-white rounded-xl shadow-md p-6 border border-gray-200 hover:shadow-xl hover:border-gray-300 transition-all duration-300 transform hover:-translate-y-1;
   }
   
   .quote-text {
-    @apply text-lg text-gray-800 font-medium mb-4 leading-relaxed italic;
+    @apply text-lg text-gray-800 font-medium mb-6 leading-relaxed italic relative;
+  }
+  
+  .quote-text::before {
+    @apply absolute -top-2 -left-2 text-4xl text-blue-200 font-serif leading-none;
+    content: '"';
+  }
+  
+  .quote-text::after {
+    @apply absolute -bottom-4 -right-2 text-4xl text-blue-200 font-serif leading-none;
+    content: '"';
   }
   
   .quote-source {
-    @apply block text-right text-gray-600 font-semibold mb-4 not-italic;
+    @apply block text-right text-gray-600 font-semibold mb-4 not-italic border-t border-gray-100 pt-4;
   }
   
   .quote-tags {
-    @apply flex flex-wrap gap-2;
+    @apply flex flex-wrap gap-2 mt-4;
   }
   
   .tag {
-    @apply inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full font-medium;
+    @apply inline-block bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 text-xs px-3 py-1 rounded-full font-medium shadow-sm;
   }
   
   .error {
-    @apply text-red-600 bg-red-50 border border-red-200 rounded-md p-4;
+    @apply text-red-600 bg-red-50 border border-red-200 rounded-md p-4 mb-4;
+  }
+  
+  .success {
+    @apply text-green-600 bg-green-50 border border-green-200 rounded-md p-4 mb-4;
+  }
+  
+  .create-quote-form {
+    @apply max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8 border border-gray-200;
+  }
+  
+  .create-quote-form h2 {
+    @apply text-2xl font-bold text-gray-800 mb-6 text-center;
+  }
+  
+  .form-group {
+    @apply mb-6;
+  }
+  
+  .form-group label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-gray-900 placeholder-gray-500;
+  }
+  
+  .form-group textarea {
+    @apply resize-y min-h-[120px];
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus {
+    @apply outline-none;
+  }
+  
+  .create-quote-form button[type="submit"] {
+    @apply w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+  
+  .create-quote-form button[type="submit"]:disabled {
+    @apply cursor-not-allowed;
   }
 }
