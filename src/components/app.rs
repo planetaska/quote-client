@@ -1,7 +1,8 @@
-use crate::components::{CreateQuoteForm, QuotesList};
-use crate::types::QuoteWithTags;
+use crate::components::{Navigation, Home, RandomQuote, About, QuotesPage};
 use leptos::prelude::*;
 use leptos::context::Provider;
+use leptos_router::components::{Router, Routes, Route};
+use leptos_router::StaticSegment;
 
 // Global refresh context
 #[derive(Clone, Copy)]
@@ -11,7 +12,6 @@ pub struct RefreshContext {
 
 #[component]
 pub fn App() -> impl IntoView {
-    let (show_form, set_show_form) = signal(false);
     let (refresh_counter, set_refresh_counter) = signal(0u32);
 
     let refresh_quotes = Callback::new(move |_| {
@@ -20,32 +20,23 @@ pub fn App() -> impl IntoView {
 
     let refresh_context = RefreshContext { refresh_quotes };
 
-    let on_quote_created = Callback::new(move |_new_quote: QuoteWithTags| {
-        // Trigger refresh by incrementing counter
-        refresh_quotes.run(());
-    });
-
     view! {
         <div class="app">
             <Provider value=refresh_context>
-                <div class="app-header">
-                    <h1>"Quote Server"</h1>
-                    <button 
-                        class="toggle-form-btn"
-                        on:click=move |_| set_show_form.update(|show| *show = !*show)
-                    >
-                        {move || if show_form.get() { "✖ Cancel" } else { "+ Add New Quote" }}
-                    </button>
-                </div>
-                
-                <div class=move || if show_form.get() { "form-container visible" } else { "form-container hidden" }>
-                    <CreateQuoteForm 
-                        on_success=Callback::new(move |_| set_show_form.set(false))
-                        on_quote_created=on_quote_created
-                    />
-                </div>
-                
-                <QuotesList refresh_trigger=refresh_counter.into() />
+                <Router>
+                    <div class="app-header">
+                        <Navigation />
+                    </div>
+                    
+                    <main class="main-content">
+                        <Routes fallback=|| "Page not found">
+                            <Route path=StaticSegment("") view=Home />
+                            <Route path=StaticSegment("random") view=RandomQuote />
+                            <Route path=StaticSegment("quotes") view=QuotesPage />
+                            <Route path=StaticSegment("about") view=About />
+                        </Routes>
+                    </main>
+                </Router>
             </Provider>
         </div>
     }
