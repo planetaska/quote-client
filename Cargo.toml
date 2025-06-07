@@ -23,6 +23,9 @@ version = "0.2.100"
 [dependencies.wasm-bindgen-futures]
 version = "0.4.50"
 
+[dependencies.js-sys]
+version = "0.3.77"
+
 [dependencies.web-sys]
 version = "0.3.77"
 features = [
