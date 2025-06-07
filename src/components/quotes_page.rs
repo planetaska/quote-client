@@ -32,7 +32,7 @@ pub fn QuotesPage() -> impl IntoView {
                 />
             </div>
             
-            <QuotesList />
+            <QuotesList refresh_trigger=refresh_context.refresh_counter />
         </div>
     }
 }

@@ -8,17 +8,21 @@ use leptos_router::{StaticSegment, ParamSegment};
 #[derive(Clone, Copy)]
 pub struct RefreshContext {
     pub refresh_quotes: Callback<()>,
+    pub refresh_counter: Signal<u32>,
 }
 
 #[component]
 pub fn App() -> impl IntoView {
-    let (_refresh_counter, set_refresh_counter) = signal(0u32);
+    let (refresh_counter, set_refresh_counter) = signal(0u32);
 
     let refresh_quotes = Callback::new(move |_| {
         set_refresh_counter.update(|n| *n += 1);
     });
 
-    let refresh_context = RefreshContext { refresh_quotes };
+    let refresh_context = RefreshContext { 
+        refresh_quotes,
+        refresh_counter: refresh_counter.into(),
+    };
 
     view! {
         <div class="app">
