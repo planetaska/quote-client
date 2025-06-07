@@ -8,7 +8,7 @@ pub fn App() -> impl IntoView {
     view! {
         <div class="app">
             <div class="app-header">
-                <h1>"Quote Manager"</h1>
+                <h1>"Quote Server"</h1>
                 <button 
                     class="toggle-form-btn"
                     on:click=move |_| set_show_form.update(|show| *show = !*show)

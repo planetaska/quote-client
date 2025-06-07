@@ -62,11 +62,11 @@
   }
   
   .quote-card {
-    @apply bg-white rounded-xl shadow-md p-6 border border-gray-200 hover:shadow-xl hover:border-gray-300 transition-all duration-300 transform hover:-translate-y-1;
+    @apply bg-white flex flex-col rounded-xl shadow-md p-6 border border-gray-200 hover:shadow-xl hover:border-gray-300 transition-all duration-300 transform hover:-translate-y-1;
   }
   
   .quote-text {
-    @apply text-lg text-gray-800 font-medium mb-6 leading-relaxed italic relative;
+    @apply grow text-lg text-gray-800 font-medium mb-6 leading-relaxed italic relative;
   }
   
   .quote-text::before {
@@ -80,11 +80,11 @@
   }
   
   .quote-source {
-    @apply block text-right text-gray-600 font-semibold mb-4 not-italic border-t border-gray-100 pt-4;
+    @apply grow-0 block text-right text-gray-600 font-semibold mb-4 not-italic border-t border-gray-100 pt-4;
   }
   
   .quote-tags {
-    @apply flex flex-wrap gap-2 mt-4;
+    @apply grow-0 flex gap-2 mt-4;
   }
   
   .tag {
