@@ -77,6 +77,9 @@ pub fn ShowQuote() -> impl IntoView {
                                 source_class="home-quote-source"
                                 tags_class="home-quote-tags"
                             />
+                            <div class="text-center mt-16">
+                                <a href="/quotes" class="btn btn-primary">Show all quotes</a>
+                            </div>
                         }.into_any()
                     } else {
                         view! {
