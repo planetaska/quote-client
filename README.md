@@ -133,3 +133,7 @@ The built files will be in the `dist/` directory.
 ## Prerequisites
 
 - The quote server must be running at `http://localhost:3000`
+
+## License
+
+MIT license
