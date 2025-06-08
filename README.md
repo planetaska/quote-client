@@ -84,7 +84,7 @@ This client consumes the following API endpoints from the quote server:
 
 ### Authentication
 
-Protected operations require JWT authentication. The client handles authentication by registering with the server using the provided credentials.
+Protected operations require JWT authentication. The client handles authentication by registering with the server using the provided credentials. The credentials are hard-coded in the `api.rs` file for the purpose of this project, but can easily be migrated to more sophisticated methods.
 
 ## Project Structure
 
