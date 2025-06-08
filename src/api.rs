@@ -1,3 +1,6 @@
+//! API client for the quote server.
+//! Handles authentication and all CRUD operations for quotes.
+
 use crate::types::{AuthBody, CreateQuoteRequest, QuoteWithTags, Registration, UpdateQuoteRequest};
 use reqwasm::http::Request;
 use web_sys::window;
@@ -7,6 +10,7 @@ const AUTH_FULL_NAME: &str = "John Smith";
 const AUTH_EMAIL: &str = "john@example.com";
 const AUTH_PASSWORD: &str = "hepjeq-jatDes-5pykfy";
 
+/// Gets auth token from localStorage or authenticates to get a new one.
 pub async fn get_auth_token() -> Result<String, String> {
     let storage = window()
         .and_then(|w| w.local_storage().ok()?)
@@ -26,6 +30,7 @@ pub async fn get_auth_token() -> Result<String, String> {
     Ok(token)
 }
 
+/// Authenticates with the server and returns an access token.
 async fn authenticate() -> Result<String, String> {
     let registration = Registration {
         full_name: AUTH_FULL_NAME.to_string(),
@@ -55,6 +60,7 @@ async fn authenticate() -> Result<String, String> {
     Ok(auth_body.access_token)
 }
 
+/// Fetches all quotes from the server.
 pub async fn fetch_quotes() -> Result<Vec<QuoteWithTags>, String> {
     let resp = Request::get("http://localhost:3000/api/v1/quotes")
         .send()
@@ -70,6 +76,7 @@ pub async fn fetch_quotes() -> Result<Vec<QuoteWithTags>, String> {
         .map_err(|e| format!("Failed to parse JSON: {:?}", e))
 }
 
+/// Fetches a specific quote by ID.
 pub async fn fetch_quote_by_id(id: u32) -> Result<QuoteWithTags, String> {
     let url = format!("http://localhost:3000/api/v1/quotes/{}", id);
     let resp = Request::get(&url)
@@ -86,6 +93,7 @@ pub async fn fetch_quote_by_id(id: u32) -> Result<QuoteWithTags, String> {
         .map_err(|e| format!("Failed to parse JSON: {:?}", e))
 }
 
+/// Fetches a random quote from the server.
 pub async fn fetch_random_quote() -> Result<QuoteWithTags, String> {
     let resp = Request::get("http://localhost:3000/api/v1/quotes/random")
         .send()
@@ -101,6 +109,7 @@ pub async fn fetch_random_quote() -> Result<QuoteWithTags, String> {
         .map_err(|e| format!("Failed to parse JSON: {:?}", e))
 }
 
+/// Creates a new quote (requires authentication).
 pub async fn create_quote(request: CreateQuoteRequest) -> Result<QuoteWithTags, String> {
     let token = get_auth_token().await?;
     let body = serde_json::to_string(&request)
@@ -123,6 +132,7 @@ pub async fn create_quote(request: CreateQuoteRequest) -> Result<QuoteWithTags, 
         .map_err(|e| format!("Failed to parse JSON: {:?}", e))
 }
 
+/// Updates an existing quote (requires authentication).
 pub async fn update_quote(id: i64, request: UpdateQuoteRequest) -> Result<QuoteWithTags, String> {
     let token = get_auth_token().await?;
     let body = serde_json::to_string(&request)
@@ -146,6 +156,7 @@ pub async fn update_quote(id: i64, request: UpdateQuoteRequest) -> Result<QuoteW
         .map_err(|e| format!("Failed to parse JSON: {:?}", e))
 }
 
+/// Deletes a quote by ID (requires authentication).
 pub async fn delete_quote(id: i64) -> Result<(), String> {
     let token = get_auth_token().await?;
     let url = format!("http://localhost:3000/api/v1/quotes/{}", id);

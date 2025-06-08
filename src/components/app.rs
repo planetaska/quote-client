@@ -4,13 +4,14 @@ use leptos::prelude::*;
 use leptos_router::components::{Route, Router, Routes};
 use leptos_router::{ParamSegment, StaticSegment};
 
-// Global refresh context
+/// Context for triggering quote list refreshes across components.
 #[derive(Clone, Copy)]
 pub struct RefreshContext {
     pub refresh_quotes: Callback<()>,
     pub refresh_counter: Signal<u32>,
 }
 
+/// Root application component with routing and global context.
 #[component]
 pub fn App() -> impl IntoView {
     let (refresh_counter, set_refresh_counter) = signal(0u32);

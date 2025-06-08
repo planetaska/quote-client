@@ -14,10 +14,7 @@ pub fn ShowQuote() -> impl IntoView {
     let (error, set_error) = signal::<Option<String>>(None);
 
     let load_quote = move || {
-        let id_str = params
-            .get()
-            .get("id")
-            .unwrap_or_default();
+        let id_str = params.get().get("id").unwrap_or_default();
 
         if let Ok(id) = id_str.parse::<u32>() {
             set_loading.set(true);

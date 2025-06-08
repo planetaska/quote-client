@@ -1,3 +1,5 @@
+//! Component modules for the quote client application.
+
 pub mod about;
 pub mod app;
 pub mod create_quote_form;
