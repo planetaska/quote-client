@@ -1,4 +1,4 @@
-use crate::types::{QuoteWithTags, CreateQuoteRequest, UpdateQuoteRequest, Registration, AuthBody};
+use crate::types::{AuthBody, CreateQuoteRequest, QuoteWithTags, Registration, UpdateQuoteRequest};
 use reqwasm::http::Request;
 use web_sys::window;
 
@@ -11,18 +11,18 @@ pub async fn get_auth_token() -> Result<String, String> {
     let storage = window()
         .and_then(|w| w.local_storage().ok()?)
         .ok_or("localStorage not available")?;
-    
+
     // Check if token exists in localStorage
     if let Ok(Some(token)) = storage.get_item("auth_token") {
         if !token.is_empty() {
             return Ok(token);
         }
     }
-    
+
     // If no token, authenticate and store it
     let token = authenticate().await?;
     let _ = storage.set_item("auth_token", &token);
-    
+
     Ok(token)
 }
 
@@ -32,10 +32,10 @@ async fn authenticate() -> Result<String, String> {
         email: AUTH_EMAIL.to_string(),
         password: AUTH_PASSWORD.to_string(),
     };
-    
+
     let body = serde_json::to_string(&registration)
         .map_err(|e| format!("Failed to serialize request: {:?}", e))?;
-    
+
     let resp = Request::post("http://localhost:3000/auth")
         .header("Content-Type", "application/json")
         .body(body)
@@ -47,10 +47,11 @@ async fn authenticate() -> Result<String, String> {
         return Err(format!("HTTP error: {}", resp.status()));
     }
 
-    let auth_body: AuthBody = resp.json()
+    let auth_body: AuthBody = resp
+        .json()
         .await
         .map_err(|e| format!("Failed to parse JSON: {:?}", e))?;
-    
+
     Ok(auth_body.access_token)
 }
 
@@ -104,7 +105,7 @@ pub async fn create_quote(request: CreateQuoteRequest) -> Result<QuoteWithTags, 
     let token = get_auth_token().await?;
     let body = serde_json::to_string(&request)
         .map_err(|e| format!("Failed to serialize request: {:?}", e))?;
-    
+
     let resp = Request::post("http://localhost:3000/api/v1/quotes")
         .header("Content-Type", "application/json")
         .header("Authorization", &format!("Bearer {}", token))
@@ -126,7 +127,7 @@ pub async fn update_quote(id: i64, request: UpdateQuoteRequest) -> Result<QuoteW
     let token = get_auth_token().await?;
     let body = serde_json::to_string(&request)
         .map_err(|e| format!("Failed to serialize request: {:?}", e))?;
-    
+
     let url = format!("http://localhost:3000/api/v1/quotes/{}", id);
     let resp = Request::put(&url)
         .header("Content-Type", "application/json")

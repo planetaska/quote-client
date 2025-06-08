@@ -19,29 +19,39 @@ pub fn About() -> impl IntoView {
                         "Technology Stack"
                     </h3>
                     <ul class="space-y-3">
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                            <span class="font-medium">"Rust"</span>
+                        <li class="flex flex-col items-start sm:flex-row sm:items-center">
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                                <span class="font-medium">"Rust"</span>
+                            </div>
                             <span class="text-gray-600 ml-2">"- Systems programming language"</span>
                         </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                            <span class="font-medium">"Leptos"</span>
+                        <li class="flex flex-col items-start sm:flex-row sm:items-center">
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                <span class="font-medium">"Leptos"</span>
+                            </div>
                             <span class="text-gray-600 ml-2">"- Reactive web framework"</span>
                         </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                            <span class="font-medium">"WebAssembly"</span>
+                        <li class="flex flex-col items-start sm:flex-row sm:items-center">
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                <span class="font-medium">"WebAssembly"</span>
+                            </div>
                             <span class="text-gray-600 ml-2">"- High-performance runtime"</span>
                         </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                            <span class="font-medium">"Trunk"</span>
+                        <li class="flex flex-col items-start sm:flex-row sm:items-center">
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                <span class="font-medium">"Trunk"</span>
+                            </div>
                             <span class="text-gray-600 ml-2">"- Build tool and dev server"</span>
                         </li>
-                        <li class="flex items-center">
-                            <span class="w-2 h-2 bg-cyan-500 rounded-full mr-3"></span>
-                            <span class="font-medium">"Tailwind CSS"</span>
+                        <li class="flex flex-col items-start sm:flex-row sm:items-center">
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-cyan-500 rounded-full mr-3"></span>
+                                <span class="font-medium">"Tailwind CSS"</span>
+                            </div>
                             <span class="text-gray-600 ml-2">"- Utility-first styling"</span>
                         </li>
                     </ul>
@@ -53,32 +63,24 @@ pub fn About() -> impl IntoView {
                         "Features"
                     </h3>
                     <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">"•"</span>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">"•"</span>
                             <span>"Browse all quotes with pagination"</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">"•"</span>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">"•"</span>
                             <span>"Discover random inspirational quotes"</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">"•"</span>
-                            <span>"Create and submit new quotes"</span>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">"•"</span>
+                            <span>"REST routes with JWT protected auth"</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">"•"</span>
-                            <span>"Update and edit existing quotes"</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">"•"</span>
-                            <span>"Delete quotes with confirmation"</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">"•"</span>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">"•"</span>
                             <span>"Responsive design for all devices"</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">"•"</span>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">"•"</span>
                             <span>"Real-time updates and state management"</span>
                         </li>
                     </ul>

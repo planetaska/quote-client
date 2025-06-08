@@ -1,5 +1,5 @@
-use leptos::prelude::*;
 use crate::types::QuoteWithTags;
+use leptos::prelude::*;
 
 #[component]
 pub fn QuoteDisplay(
@@ -10,10 +10,26 @@ pub fn QuoteDisplay(
     #[prop(optional)] source_class: &'static str,
     #[prop(optional)] tags_class: &'static str,
 ) -> impl IntoView {
-    let container_class = if container_class.is_empty() { "quote-display" } else { container_class };
-    let quote_class = if quote_class.is_empty() { "quote-text" } else { quote_class };
-    let source_class = if source_class.is_empty() { "quote-source" } else { source_class };
-    let tags_class = if tags_class.is_empty() { "quote-tags" } else { tags_class };
+    let container_class = if container_class.is_empty() {
+        "quote-display"
+    } else {
+        container_class
+    };
+    let quote_class = if quote_class.is_empty() {
+        "quote-text"
+    } else {
+        quote_class
+    };
+    let source_class = if source_class.is_empty() {
+        "quote-source"
+    } else {
+        source_class
+    };
+    let tags_class = if tags_class.is_empty() {
+        "quote-tags"
+    } else {
+        tags_class
+    };
 
     view! {
         <div class=container_class>

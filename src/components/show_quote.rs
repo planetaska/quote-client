@@ -1,9 +1,10 @@
+use crate::api::fetch_quote_by_id;
+use crate::components::QuoteDisplay;
+use crate::types::QuoteWithTags;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
+use leptos_router::components::A;
 use leptos_router::hooks::use_params_map;
-use crate::api::fetch_quote_by_id;
-use crate::types::QuoteWithTags;
-use crate::components::QuoteDisplay;
 
 #[component]
 pub fn ShowQuote() -> impl IntoView {
@@ -13,12 +14,15 @@ pub fn ShowQuote() -> impl IntoView {
     let (error, set_error) = signal::<Option<String>>(None);
 
     let load_quote = move || {
-        let id_str = params.get().get("id").map(|s| s.clone()).unwrap_or_default();
-        
+        let id_str = params
+            .get()
+            .get("id")
+            .unwrap_or_default();
+
         if let Ok(id) = id_str.parse::<u32>() {
             set_loading.set(true);
             set_error.set(None);
-            
+
             spawn_local(async move {
                 match fetch_quote_by_id(id).await {
                     Ok(q) => {
@@ -45,7 +49,7 @@ pub fn ShowQuote() -> impl IntoView {
         <div class="page-content">
             <div class="show-quote-container">
                 <h1 class="page-title">"Quote"</h1>
-                
+
                 {move || {
                     if loading.get() {
                         view! {
@@ -58,9 +62,11 @@ pub fn ShowQuote() -> impl IntoView {
                         view! {
                             <div class="error-message">
                                 <p>"Error: " {error_msg}</p>
-                                <button 
+                                <button
                                     class="btn btn-secondary"
                                     on:click=move |_| load_quote()
+                                    tabindex="0"
+                                    aria-label="Retry loading the quote"
                                 >
                                     "Try Again"
                                 </button>
@@ -69,7 +75,7 @@ pub fn ShowQuote() -> impl IntoView {
                     } else if let Some(q) = quote.get() {
                         let quote_signal = Signal::from(q);
                         view! {
-                            <QuoteDisplay 
+                            <QuoteDisplay
                                 quote=quote_signal
                                 show_quote_marks=false
                                 container_class="home-quote-display"
@@ -78,7 +84,7 @@ pub fn ShowQuote() -> impl IntoView {
                                 tags_class="home-quote-tags"
                             />
                             <div class="text-center mt-16">
-                                <a href="/quotes" class="btn btn-primary">Show all quotes</a>
+                                <A href="/quotes" attr:class="btn btn-primary" attr:aria-label="Navigate to all quotes page" attr:tabindex="0">Show all quotes</A>
                             </div>
                         }.into_any()
                     } else {

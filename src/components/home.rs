@@ -1,8 +1,8 @@
+use crate::api::fetch_random_quote;
+use crate::components::QuoteDisplay;
+use crate::types::QuoteWithTags;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use crate::api::fetch_random_quote;
-use crate::types::QuoteWithTags;
-use crate::components::QuoteDisplay;
 
 #[component]
 pub fn Home() -> impl IntoView {
@@ -13,7 +13,7 @@ pub fn Home() -> impl IntoView {
     let load_random_quote = move || {
         set_loading.set(true);
         set_error.set(None);
-        
+
         spawn_local(async move {
             match fetch_random_quote().await {
                 Ok(q) => {
@@ -39,10 +39,9 @@ pub fn Home() -> impl IntoView {
                 <h1 class="hero-title">"Welcome to the Quotes Server!"</h1>
                 <p class="hero-subtitle">"Serving up fresh inspiration 24/7 — no login, no nonsense, just quotes!"</p>
             </div>
-            
+
             <div class="home-quote-section">
-                <h2 class="section-title">"Your Daily Inspiration"</h2>
-                
+
                 {move || {
                     if loading.get() {
                         view! {
@@ -55,9 +54,11 @@ pub fn Home() -> impl IntoView {
                         view! {
                             <div class="error-message">
                                 <p>"Error: " {error_msg}</p>
-                                <button 
+                                <button
                                     class="btn btn-secondary"
                                     on:click=move |_| load_random_quote()
+                                    tabindex="0"
+                                    aria-label="Retry loading a random quote"
                                 >
                                     "Try Again"
                                 </button>
@@ -66,7 +67,7 @@ pub fn Home() -> impl IntoView {
                     } else if let Some(q) = quote.get() {
                         let quote_signal = Signal::from(q);
                         view! {
-                            <QuoteDisplay 
+                            <QuoteDisplay
                                 quote=quote_signal
                                 show_quote_marks=false
                                 container_class="home-quote-display"
@@ -83,12 +84,14 @@ pub fn Home() -> impl IntoView {
                         }.into_any()
                     }
                 }}
-                
+
                 <div class="home-quote-actions">
-                    <button 
+                    <button
                         class="btn btn-primary"
                         on:click=move |_| load_random_quote()
                         disabled=loading
+                        tabindex="0"
+                        aria-label="Get another random quote"
                     >
                         {move || if loading.get() { "Loading..." } else { "Get Another Quote" }}
                     </button>

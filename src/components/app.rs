@@ -1,8 +1,8 @@
-use crate::components::{Navigation, Home, RandomQuote, About, QuotesPage, ShowQuote};
-use leptos::prelude::*;
+use crate::components::{About, Home, Navigation, QuotesPage, RandomQuote, ShowQuote};
 use leptos::context::Provider;
-use leptos_router::components::{Router, Routes, Route};
-use leptos_router::{StaticSegment, ParamSegment};
+use leptos::prelude::*;
+use leptos_router::components::{Route, Router, Routes};
+use leptos_router::{ParamSegment, StaticSegment};
 
 // Global refresh context
 #[derive(Clone, Copy)]
@@ -19,21 +19,27 @@ pub fn App() -> impl IntoView {
         set_refresh_counter.update(|n| *n += 1);
     });
 
-    let refresh_context = RefreshContext { 
+    let refresh_context = RefreshContext {
         refresh_quotes,
         refresh_counter: refresh_counter.into(),
     };
 
     view! {
         <div class="app">
+            <a href="#main-content" class="skip-link">"Skip to main content"</a>
             <Provider value=refresh_context>
                 <Router>
-                    <div class="app-header">
+                    <header class="app-header" role="banner">
                         <Navigation />
-                    </div>
-                    
-                    <main class="main-content">
-                        <Routes fallback=|| "Page not found">
+                    </header>
+
+                    <main id="main-content" class="main-content" role="main" tabindex="-1">
+                        <Routes fallback=|| view! {
+                            <div role="alert" aria-live="assertive">
+                                <h1>"Page Not Found"</h1>
+                                <p>"The requested page could not be found."</p>
+                            </div>
+                        }>
                             <Route path=StaticSegment("") view=Home />
                             <Route path=StaticSegment("random") view=RandomQuote />
                             <Route path=StaticSegment("quotes") view=QuotesPage />

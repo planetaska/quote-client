@@ -194,7 +194,7 @@
   }
 
   .nav-list {
-    @apply max-w-2xl mx-auto flex flex-wrap justify-between items-center gap-1 p-4;
+    @apply max-w-2xl mx-auto flex flex-wrap justify-between items-center p-0 sm:gap-1 sm:p-4;
   }
 
   .nav-list li {
@@ -327,7 +327,7 @@
   }
 
   .home-quote-source {
-    @apply text-xl text-gray-600 font-semibold mb-6 not-italic;
+    @apply text-xl text-gray-600 font-semibold mb-6 not-italic text-right;
   }
 
   .home-quote-tags {
@@ -357,5 +357,38 @@
 
   .btn-secondary {
     @apply bg-gray-500 hover:bg-gray-600 text-white focus:ring-gray-500 shadow-md hover:shadow-lg;
+  }
+
+  /* Accessibility Utilities */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  /* Focus indicators */
+  *:focus-visible {
+    @apply outline-2 outline-blue-600 outline-offset-2;
+  }
+
+  /* Skip link for keyboard navigation */
+  .skip-link {
+    @apply absolute top-0 left-0 bg-blue-600 text-white px-4 py-2 text-sm font-medium rounded-br-lg z-50 transform -translate-y-full focus:translate-y-0 transition-transform duration-200;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .nav-link,
+    .btn,
+    .form-group input,
+    .form-group textarea {
+      @apply border-2 border-current;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      @apply transition-none animate-none;
+    }
   }
 }

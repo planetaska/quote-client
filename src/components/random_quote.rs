@@ -1,8 +1,8 @@
+use crate::api::fetch_random_quote;
+use crate::components::QuoteDisplay;
+use crate::types::QuoteWithTags;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use crate::api::fetch_random_quote;
-use crate::types::QuoteWithTags;
-use crate::components::QuoteDisplay;
 
 #[component]
 pub fn RandomQuote() -> impl IntoView {
@@ -13,7 +13,7 @@ pub fn RandomQuote() -> impl IntoView {
     let load_random_quote = move || {
         set_loading.set(true);
         set_error.set(None);
-        
+
         spawn_local(async move {
             match fetch_random_quote().await {
                 Ok(q) => {
@@ -37,7 +37,7 @@ pub fn RandomQuote() -> impl IntoView {
         <div class="page-content">
             <div class="random-quote-container">
                 <h1 class="page-title">"Random Quote"</h1>
-                
+
                 {move || {
                     if loading.get() {
                         view! {
@@ -55,7 +55,7 @@ pub fn RandomQuote() -> impl IntoView {
                     } else if let Some(q) = quote.get() {
                         let quote_signal = Signal::from(q);
                         view! {
-                            <QuoteDisplay 
+                            <QuoteDisplay
                                 quote=quote_signal
                                 show_quote_marks=false
                                 container_class="home-quote-display"
@@ -72,12 +72,14 @@ pub fn RandomQuote() -> impl IntoView {
                         }.into_any()
                     }
                 }}
-                
+
                 <div class="quote-actions">
-                    <button 
+                    <button
                         class="btn btn-primary next-quote-btn"
                         on:click=move |_| load_random_quote()
                         disabled=loading
+                        tabindex="0"
+                        aria-label="Load another random quote"
                     >
                         {move || if loading.get() { "Loading..." } else { "Next Quote" }}
                     </button>
