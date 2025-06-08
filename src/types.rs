@@ -23,3 +23,16 @@ pub struct UpdateQuoteRequest {
     pub source: String,
     pub tags: Option<Vec<String>>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Registration {
+    pub full_name: String,
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AuthBody {
+    pub access_token: String,
+    pub token_type: String,
+}

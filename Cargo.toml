@@ -34,15 +34,4 @@ version = "0.5.0"
 
 [dependencies.web-sys]
 version = "0.3.77"
-features = [
-    "console",
-    "Document",
-    "Element",
-    "HtmlElement",
-    "Window",
-    "HtmlInputElement",
-    "HtmlTextAreaElement",
-    "Event",
-    "EventTarget",
-    "SubmitEvent"
-]
+features = ["console", "Document", "Element", "HtmlElement", "Window", "HtmlInputElement", "HtmlTextAreaElement", "Event", "EventTarget", "SubmitEvent", "Storage"]
