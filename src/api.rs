@@ -1,7 +1,9 @@
 //! API client for the quote server.
 //! Handles authentication and all CRUD operations for quotes.
 
-use crate::types::{AuthBody, CreateQuoteRequest, QuoteWithTags, Registration, UpdateQuoteRequest};
+use crate::types::{
+    AuthBody, CreateQuoteRequest, QuoteWithTags, Registration, SearchParams, UpdateQuoteRequest,
+};
 use reqwasm::http::Request;
 use web_sys::window;
 
@@ -60,9 +62,32 @@ async fn authenticate() -> Result<String, String> {
     Ok(auth_body.access_token)
 }
 
-/// Fetches all quotes from the server.
-pub async fn fetch_quotes() -> Result<Vec<QuoteWithTags>, String> {
-    let resp = Request::get("http://localhost:3000/api/v1/quotes")
+/// Fetches all quotes from the server with optional search parameters.
+pub async fn fetch_quotes(
+    search_params: Option<SearchParams>,
+) -> Result<Vec<QuoteWithTags>, String> {
+    let mut url = "http://localhost:3000/api/v1/quotes".to_string();
+
+    if let Some(params) = search_params {
+        let mut query_params = Vec::new();
+
+        if let Some(quote) = params.quote.filter(|s| !s.trim().is_empty()) {
+            query_params.push(format!("quote={}", urlencoding::encode(&quote)));
+        }
+        if let Some(source) = params.source.filter(|s| !s.trim().is_empty()) {
+            query_params.push(format!("source={}", urlencoding::encode(&source)));
+        }
+        if let Some(tag) = params.tag.filter(|s| !s.trim().is_empty()) {
+            query_params.push(format!("tag={}", urlencoding::encode(&tag)));
+        }
+
+        if !query_params.is_empty() {
+            url.push('?');
+            url.push_str(&query_params.join("&"));
+        }
+    }
+
+    let resp = Request::get(&url)
         .send()
         .await
         .map_err(|e| format!("Request failed: {:?}", e))?;

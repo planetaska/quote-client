@@ -1,15 +1,26 @@
 use crate::api::fetch_quotes;
 use crate::components::QuoteCard;
+use crate::types::SearchParams;
 use leptos::prelude::*;
 
 #[component]
-pub fn QuotesList(#[prop(optional)] refresh_trigger: Option<Signal<u32>>) -> impl IntoView {
+pub fn QuotesList(
+    #[prop(optional)] refresh_trigger: Option<Signal<u32>>,
+    #[prop(optional)] search_params: Option<Signal<SearchParams>>,
+) -> impl IntoView {
     let quotes_resource = LocalResource::new(move || {
         // Track the refresh trigger to re-run when it changes
         if let Some(trigger) = refresh_trigger {
             trigger.track();
         }
-        fetch_quotes()
+        // Track search params to re-run when they change
+        let params = if let Some(search_signal) = search_params {
+            search_signal.track();
+            Some(search_signal.get())
+        } else {
+            None
+        };
+        fetch_quotes(params)
     });
 
     view! {

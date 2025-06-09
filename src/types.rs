@@ -43,3 +43,11 @@ pub struct AuthBody {
     pub access_token: String,
     pub token_type: String,
 }
+
+/// Search parameters for filtering quotes.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct SearchParams {
+    pub quote: Option<String>,
+    pub source: Option<String>,
+    pub tag: Option<String>,
+}
